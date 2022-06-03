@@ -1,7 +1,7 @@
 require "reverse_markdown"
 module Agents
   class HtmlToMarkdownAgent < Agent
-
+    can_dry_run!
     description <<-MD
       The html to markdown agent takes input in the form of an html string and converts it to markdown.
 
@@ -23,14 +23,14 @@ module Agents
     end
 
     def check
-      html_input = interpolated("source")
+      html_input = interpolated["source"]
       output = ReverseMarkdown.convert(html_input, unknown_tags: :bypass)
       create_event payload: {'markdown' => output}
     end
 
     def receive(incoming_events)
       interpolate_with_each(incoming_events) do |event|
-        html_input = interpolated("source")
+        html_input = interpolated["source"]
         output = ReverseMarkdown.convert(html_input, unknown_tags: :bypass)
         create_event payload: event.payload.merge({'markdown' => output})
       end
