@@ -1,7 +1,6 @@
-require 'reverse_markdown'
+require "reverse_markdown"
 module Agents
   class HtmlToMarkdownAgent < Agent
-    default_schedule 'never'
 
     description <<-MD
       The html to markdown agent takes input in the form of an html string and converts it to markdown.
@@ -15,9 +14,12 @@ module Agents
       }
     end
 
+    def working?
+      true
+    end
+
     def validate_options
       errors.add(:base, 'source_missing') unless options['source'].present?
-      errors.add(:base, 'source_not_string') unless options['source'] === String
     end
 
     def check
